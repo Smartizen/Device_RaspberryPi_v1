@@ -7,6 +7,7 @@ from imutils.video import VideoStream
 from flask import Response
 from flask import Flask
 from flask import render_template
+from flask import request, jsonify
 import threading
 import argparse
 import datetime
@@ -19,6 +20,9 @@ import cv2
 # are viewing tthe stream)
 outputFrame = None
 lock = threading.Lock()
+
+# turn on and of send notification
+reportMode = False
 
 # initialize a flask object
 app = Flask(__name__)
@@ -110,6 +114,19 @@ def generate():
         # yield the output frame in the byte format
         yield(b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' +
               bytearray(encodedImage) + b'\r\n')
+
+
+@app.route("/reportMode", methods=['POST', 'GET'])
+def setreportMode():
+    if request.method == 'POST':
+        if request.json.control == 0:
+            reportMode = False
+        else:
+            reportMode = True
+    else:
+        return jsonify(
+            reportMode=reportMode,
+        )
 
 
 @app.route("/video_feed")
