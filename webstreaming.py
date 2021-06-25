@@ -120,10 +120,14 @@ def generate():
 def setreportMode():
     global reportMode
     if request.method == 'POST':
-        if request.json.control == 0:
+        if request.json['control'] == 0:
             reportMode = False
+
         else:
             reportMode = True
+        return jsonify(
+            reportMode=reportMode,
+        )
     else:
         return jsonify(
             reportMode=reportMode,
