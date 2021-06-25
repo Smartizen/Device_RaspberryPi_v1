@@ -120,7 +120,7 @@ def generate():
 def setreportMode():
     global reportMode
     if request.method == 'POST':
-        if request.json['control'] == 0:
+        if request.form['control'] == 0:
             reportMode = False
 
         else:
