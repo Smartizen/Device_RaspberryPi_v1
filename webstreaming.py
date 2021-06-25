@@ -14,6 +14,7 @@ import datetime
 import imutils
 import time
 import cv2
+import requests
 
 # initialize the output frame and a lock used to ensure thread-safe
 # exchanges of the output frames (useful for multiple browsers/tabs
@@ -43,7 +44,7 @@ def index():
 def detect_motion(frameCount):
     # grab global references to the video stream, output frame, and
     # lock variables
-    global vs, outputFrame, lock
+    global vs, outputFrame, lock, reportMode
 
     # initialize the motion detector and the total number of frames
     # read thus far
@@ -76,6 +77,16 @@ def detect_motion(frameCount):
             if motion is not None:
                 # unpack the tuple and draw the box surrounding the
                 # "motion area" on the output frame
+                if reportMode:
+                    data = {
+                        'deviceId': 'Camera_CM1',
+                        'title': 'Cảnh báo bất thường',
+                        'body': 'Nhiệt độ phòng đang lớn hơn 50 độ',
+                    }
+                    res = requests.post(
+                        'http://192.168.2.101:4000/messaging/send-message', json=data)
+                    reportMode = False
+
                 (thresh, (minX, minY, maxX, maxY)) = motion
                 cv2.rectangle(frame, (minX, minY), (maxX, maxY),
                               (0, 0, 255), 2)
