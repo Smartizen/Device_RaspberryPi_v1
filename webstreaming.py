@@ -118,6 +118,7 @@ def generate():
 
 @app.route("/reportMode", methods=['POST', 'GET'])
 def setreportMode():
+    global reportMode
     if request.method == 'POST':
         if request.json.control == 0:
             reportMode = False
