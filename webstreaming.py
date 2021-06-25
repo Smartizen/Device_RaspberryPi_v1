@@ -81,10 +81,10 @@ def detect_motion(frameCount):
                     data = {
                         'deviceId': 'Camera_CM1',
                         'title': 'Cảnh báo bất thường',
-                        'body': 'Nhiệt độ phòng đang lớn hơn 50 độ',
+                        'body': 'Có người đột nhập',
                     }
                     res = requests.post(
-                        'http://192.168.2.101:4000/messaging/send-message', json=data)
+                        'http://192.168.2.101:4000/api/v1/messaging/send-message', json=data)
                     reportMode = False
 
                 (thresh, (minX, minY, maxX, maxY)) = motion
